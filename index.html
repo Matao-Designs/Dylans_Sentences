@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Sentence Creator</title>
+</head>
+<body>
+    
+<div class="main">
+    <h1></h1>
+    <h3>Points: <span id="points">0</span></h3>
+    <form id="dylansForm" action="#">
+        <label for="dylans_Text"><span id="firstName"></span>Please enter your text in the box below, then click Save.</label><br>
+        <small>For every sentence you start with a capital letter and end with proper punctuation, you will get 10 points!</small>
+        <br>
+        <input type="text" id="dylans_Text" placeholder="Enter your sentence here...">
+        <button type="submit" id="submitForm">Save</button>
+    </form>    
+    <div class="alerts"></div>
+    <div class="sentences"></div>
+</div>
+    
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+
+<script>
+    let yourName = prompt("Hello and welcome to Dylan's sentences. What is your name?");
+
+$(document).ready(function(){
+    $('h1').html(yourName + "'s Sentences");
+    $('#firstName').html("Hello " + yourName + "! ");
+    //Form submission
+    $('#submitForm').click(function(){
+         var paragraphs = $('p');
+         let thetext = $('#dylans_Text').val();
+         let theCount = 0;
+
+        for(let i = 0; i < paragraphs.length; i++)
+        {
+            if($(paragraphs[i]).html() == "")
+            {
+                $(paragraphs[i]).html() = thetext;
+            }
+            else
+            {
+                theCount++;
+            }
+        }
+
+        if(theCount == paragraphs.length )
+        {
+            $('.sentences').prepend('<p>' + thetext + '</p>');
+        }
+
+        $('#dylans_Text').val('');
+        validateSentence(thetext);
+
+
+    });
+});
+
+
+        function validateSentence(sentence)
+        {
+            $('.alerts').hide();
+            $('.alerts').css('background','red');
+
+
+            let i=0;
+            let message = '';
+
+            //Test for capital letter at the beginning
+            let character = sentence.charAt(i);
+               if (character == character.toLowerCase()){
+                message += 'Remember to start each sentence with a capital letter. You can make a capital letter by holding the SHIFT key and pressing the letter.<br><br>';
+               }
+               
+            //Test for last character
+            let theCount = 0;
+              switch(sentence.charAt(sentence.length -1))
+              {
+                 case ".":
+                 case "!":
+                 case "?":
+                    theCount = 0;
+                 break; 
+
+                 default: 
+                 theCount++;
+              }  
+              
+               if(theCount > 0)message += 'Remember to add a "., !, or ?" at the end of a sentence.<br><br>';
+
+
+                if(message != '') {
+                    $('.alerts').html(message);
+                    $('.alerts').show();
+                }
+                else{
+                    $('.alerts').css('background','lime');
+                    $('.alerts').html('That was a great sentence!!');
+                    $('.alerts').show();
+                    let points = parseInt($('#points').html());
+                    newPoints = Math.abs(points + 10);
+                    $('#points').html(newPoints);
+                }                
+        }
+
+
+</script>
+
+</body>
+</html>
